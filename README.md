@@ -23,6 +23,15 @@ Client        Server
   |           | Acknowledge
   |<----------|
 
+Client        Server
+  | Entdecken  |
+  |---------->|
+  |           | Angebot
+  |<----------|
+  | Anfrage   |
+  |---------->|
+  |           | Anerkennung
+  |<----------|
 ------------------------------------------------------------
 
 🔧 Grundlegende Linux-Befehle
