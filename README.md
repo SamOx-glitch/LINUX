@@ -1,6 +1,52 @@
 linux_notes = """
 🐧 Linux Grundlagen & Netzwerk
 
+Legende:
+NIC = Network Interface Card (Netzwerkkarte)
+IP-Adresse = z.B. 192.168.1.10/24
+Subnetzmaske = 255.255.255.0
+Net-ID = Netzwerkanteil einer IP-Adresse
+
+Beispiel:
+
+    [ Rechner 1 ]
+    +---------------------+
+    | NIC 1               |
+    | IP: 192.168.1.10    | <---+
+    | Subnetz: /24        |     |
+    +---------------------+     |
+                                | gemeinsames
+                                | Subnetz: 192.168.1.0/24
+                                |
+    +---------------------+     |
+    | NIC 2               |     |
+    | IP: 192.168.1.11    | <---+
+    | Subnetz: /24        |
+    +---------------------+
+    [ Rechner 2 ]
+
+Jede IP-Adresse im Subnetz 192.168.1.0/24 hat die:
+- Net-ID: 192.168.1.0
+- Host-ID: Der letzte Teil (z. B. .10, .11, …)
+
+Maximale Hosts pro /24-Netz: 254
+  (von .1 bis .254 – .0 = Netzadresse, .255 = Broadcast)
+
+Hinweis:
+- Alle Geräte im selben Subnetz können direkt miteinander kommunizieren.
+- Unterschiedliche Subnetze benötigen ein Gateway/Router zur Kommunikation.
+
+  
+Zusammenfassung:
+----------------------------------------------------
+IP-Adresse:     192.168.1.10/25
+Subnetzmaske:   255.255.255.128 (/25)
+Invert-Maske:   0.0.0.127
+Net-ID:         192.168.1.0
+Broadcast:      192.168.1.127
+Hostbereich:    192.168.1.1 – 192.168.1.126 (Range)
+----------------------------------------------------
+
 📡 DHCP-Protokoll
 
 - Zweck: Automatische Vergabe von IP-Adressen
