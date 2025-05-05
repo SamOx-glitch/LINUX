@@ -159,33 +159,6 @@ ss -una
 
 ------------------------------------------------------------
 
-🧪 Bash-Skript: Warnung bei voller Partition
-
-Datei: hd.sh
-
-#!/bin/bash
-HD=$(df -h | grep sda1 | tr -s " " | cut -d " " -f5 | cut -d% -f1)
-
-if [ "$HD" -gt 5 ]; then
-    echo "WARNUNG: Die Partition /dev/sda1 ist zu $HD% voll!" | mail -s "HD-Warning" user@example.com
-fi
-
-chmod +x hd.sh
-./hd.sh
-"""
-
-# Save to txt file
-file_path = "/mnt/data/Linux_Grundlagen_Notizen.txt"
-with open(file_path, "w") as file:
-    file.write(linux_notes)
-
-file_path
-
-# Die bisherigen Notizen werden um zusätzliche sinnvolle Bereiche erweitert.
-
-additional_notes = """
-------------------------------------------------------------
-
 🧰 Paketverwaltung (Debian/Ubuntu – apt)
 
 apt update                 # Paketquellen aktualisieren
@@ -260,11 +233,103 @@ ss -tuln                          # Offene Ports (neuer, moderner)
 nmap <ziel>                       # Portscan (ggf. installieren)
 
 ------------------------------------------------------------
-"""
+🧪 Bash-Skript: Warnung bei voller Partition
+------------------------------------------------------------
 
-# Datei um neue Inhalte ergänzen
-file_path = "/mnt/data/Linux_Grundlagen_Notizen_erweitert.txt"
-with open(file_path, "a") as file:
-    file.write(additional_notes)
+Datei: hd.sh
 
-file_path
+nano /hd.sh
+
+#!/bin/bash
+HD=$(df -h | grep sda1 | tr -s " " | cut -d " " -f5 | cut -d% -f1)
+
+if [ "$HD" -gt 5 ]; then
+    echo "WARNUNG: Die Partition /dev/sda1 ist zu $HD% voll!" | mail -s "HD-Warning" user@example.com
+fi
+
+chmod +x hd.sh
+
+./hd.sh
+
+------------------------------------------------------------
+# 🧪 Bash: Beispiele mit if, else, elif, while
+------------------------------------------------------------
+
+# Beispiel 1: Einfache Bedingung
+#!/bin/bash
+
+echo "Gib eine Zahl ein:"
+read zahl
+
+if [ "$zahl" -gt 10 ]; then
+    echo "Die Zahl ist größer als 10"
+else
+    echo "Die Zahl ist 10 oder kleiner"
+fi
+
+------------------------------------------------------------
+# Beispiel 2: Mehrere Bedingungen mit elif
+------------------------------------------------------------
+#!/bin/bash
+
+echo "Wie ist das Wetter? (sonnig/regnerisch/bewölkt)"
+read wetter
+
+if [ "$wetter" = "sonnig" ]; then
+    echo "Geh nach draußen ☀️"
+elif [ "$wetter" = "regnerisch" ]; then
+    echo "Nimm einen Schirm ☔"
+elif [ "$wetter" = "bewölkt" ]; then
+    echo "Vielleicht wird's noch schön ⛅"
+else
+    echo "Ungültige Eingabe"
+fi
+
+
+------------------------------------------------------------
+# Beispiel 3: Benutzer abfragen
+------------------------------------------------------------
+#!/bin/bash
+
+echo "Benutzername:"
+read name
+
+if id "$name" &>/dev/null; then
+    echo "Benutzer $name existiert"
+else
+    echo "Benutzer $name existiert NICHT"
+fi
+
+------------------------------------------------------------
+# Beispiel 4: While-Schleife mit if
+------------------------------------------------------------
+#!/bin/bash
+
+count=1
+
+while [ $count -le 5 ]; do
+    if [ $((count % 2)) -eq 0 ]; then
+        echo "$count ist gerade"
+    else
+        echo "$count ist ungerade"
+    fi
+    count=$((count + 1))
+done
+
+
+------------------------------------------------------------
+# Beispiel 5: Datei prüfen
+------------------------------------------------------------
+#!/bin/bash
+
+echo "Pfad zur Datei eingeben:"
+read dateipfad
+
+if [ -f "$dateipfad" ]; then
+    echo "Datei existiert: $dateipfad"
+else
+    echo "Datei existiert nicht"
+fi
+
+------------------------------------------------------------
+
