@@ -236,6 +236,19 @@ chmod a+x /etc/rc.local
 
 . /etc/rc.local
 
+
+------------------------------------------------------------
+DNS
+
+ROOT-Server
+
+A fully qualified domain name (FQDN), sometimes also called an absolute domain name, is a domain name that specifies its exact location in the tree hierarchy of the Domain Name System (DNS). 
+
+  www.  google . de.   = fqdn
+1.top-level-domain  gov,com,edu,org | an,at,de,tv 
+2.sub-level-domain google,t-online,1&1 (alles nach dem ersten punkt und vor dem letzten)
+3.Hostname         www , hostname (alles vor dem ersten punkt)
+
 ------------------------------------------------------------
 
 🧰 Paketverwaltung (Debian/Ubuntu – apt)
