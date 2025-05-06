@@ -221,7 +221,7 @@ nano /etc/sysctl.conf
 
 apt install iptables
 
-iptables -t nat -A POSTROUTING -o enp0s3 -j MASQERADE
+iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
 (enp0s8 geht zum client enps03 geht ins internet)
 
 
