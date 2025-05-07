@@ -169,14 +169,61 @@ free -h        # besser lesbar (MB/GB)
 /var - Logs, Caches
 
 ------------------------------------------------------------
+Verzeichnis erstellen
 
+mkdir -p /daten/innen   (parent verzeichnis erstellen)
+
+
+------------------------------------------------------------
+mount (verzeichnis einem device zuordnen)
+nano /etc/fstab
+
+/dev/VG/lv1    /daten/innen    ext4         defaults    0    0
+/dev/VG/lv2    /daten/aussen    ext4        defaults    0    0
+festplatte       verzeichnis    format    standard einstellungen
+
+mount -a (die änderungen montieren/übernehmen)
+
+------------------------------------------------------------
+verzeichnis einer gruppe zuordnen
+
+chgrp intern /daten/innen
+chgrp extern /daten/aussen
+
+------------------------------------------------------------
+nano /etc/default/useradd   (bash shell zuordnen als default)
+
+nano /etc/group             (User hinzufügen)
+
+d------------------------------------------------------------
 🧱 RAID mit mdadm
 
 apt install mdadm
 
-mdadm -C /dev/md127 -l1 -n2 /dev/sdb /dev/sdc -x1 /dev/sdd
+mdadm -C /dev/md127      -l1             -n2 /dev/sd[b-c]         -x1 /dev/sdd
+           legende     raid level       wieviel platten ohne spare            spare
 
-mkfs.ext4 /dev/md127
+
+-Logisches Volume Managment
+
+1.pvcreate     /dev/md127                                      (Platten Volumen erstellen)
+         device = md127
+2.vgcreate        VG                    /dev/md127             (Volumen Gruppe erstellen)
+        Volumen gruppen name           device   
+
+3.lvcreate -n <name>   -L<Größe>   <Volume Gruppe>             (Logisches Volume erstellen)
+            name      M,G,T     name von Volume Gruppe
+
+lvdisplay    (Status des Volumes anzeigen)
+
+ls -l /dev/VG     (device mapper)
+
+-Formatieren (Formatsystem/speichersystem-ext4ls)
+
+mkfs.ext4 /dev/md127   (wenn ich den RAID formatieren möchte)
+*bei der RAID formatierung wird das logische Volumen zurückgesetzt)
+
+mfks.ext4 /dev/VG/l1   (wenn ich das Volumen formatieren möchte)
 
 ------------------------------------------------------------
 
@@ -236,7 +283,8 @@ chmod a+x /etc/rc.local
 
 . /etc/rc.local
 
-
+------------------------------------------------------------
+systemctl restart NetworkManager.service (wenn man google per ping nicht erreicht auf der VM (nicht auf dem router))
 ------------------------------------------------------------
 DNS
 
@@ -248,6 +296,44 @@ A fully qualified domain name (FQDN), sometimes also called an absolute domain n
 1.top-level-domain  gov,com,edu,org | an,at,de,tv 
 2.sub-level-domain google,t-online,1&1 (alles nach dem ersten punkt und vor dem letzten)
 3.Hostname         www , hostname (alles vor dem ersten punkt)
+
+------------------------------------------------------------
+Domains
+
+dig  (domain information grabber)
+
+dig t-online.de 
+
+SOA = start of authority
+
+A  = address (ipv4)
+NS = Nameserver
+MX = mailexchanger
+AAAA = ipv6
+PTR = 
+
+host www.vodafone.de (forward auflösung) zeigt ip an 
+
+host 139.7.147.41 (reverse auflösung) zeigt die domain an 
+
+SOA-Datensatz
+
+ttl = time to live
+
+<domain>.       ttl        <class>          <typ>        <(Master)Name-Server>                <e-mail-admin>
+t-online.de     86400         IN            SOA          dns00.dns.t-ipnet.de.        dns.telekom.de.     (
+
+2025050600  ; serial number      (letzte DNS bearbeitung)
+     10800  ; refresh time       (
+      1800  ; retry time         (
+   3024000  ; expire time        (ablaufdatum)
+      3600  ; neg.ttl            (wenn nach einem Rechner gefragt wurde der nicht in der Domain ist wir diese anfrage für eine stunde im Cache gespeichert)
+)
+                            IN                NS        dns00.dns.t-ipnet.de.
+                            IN                NS        dns182.t-online.de.
+dns                         IN                A           194.2.16.170
+www                         IN                A            12.144.33.8
+
 
 ------------------------------------------------------------
 
