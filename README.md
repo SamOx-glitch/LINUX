@@ -334,6 +334,11 @@ t-online.de     86400         IN            SOA          dns00.dns.t-ipnet.de.  
 dns                         IN                A           194.2.16.170
 www                         IN                A            12.144.33.8
 
+less named.conf
+less nameld.conf.default-zones
+less /usr/share/dns/root.hints
+less db.local
+
 
 ------------------------------------------------------------
 
