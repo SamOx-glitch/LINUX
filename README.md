@@ -191,11 +191,13 @@ chgrp intern /daten/innen
 chgrp extern /daten/aussen
 
 ------------------------------------------------------------
+
 nano /etc/default/useradd   (bash shell zuordnen als default)
 
 nano /etc/group             (User hinzufügen)
 
-d------------------------------------------------------------
+------------------------------------------------------------
+
 🧱 RAID mit mdadm
 
 apt install mdadm
@@ -238,6 +240,7 @@ mfks.ext4 /dev/VG/l1   (wenn ich das Volumen formatieren möchte)
 ifup enp0s8
 
 ------------------------------------------------------------
+
 📡 DHCP-Server einrichten
 
 apt install isc-dhcp-server
