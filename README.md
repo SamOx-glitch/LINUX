@@ -356,8 +356,8 @@ less named.conf.local
 
 nano named.conf.options
 >forwarders (entkommentiert)
->8.8.8.8
->1.1.1.1
+>8.8.8.8                       (Hier können wir auch einen anderen server einstellen)  
+>1.1.1.1                       
 ipv6 kommentiert //
 
 nano named.conf.local
@@ -403,12 +403,32 @@ $TTL 86400
      IN      NS     dns1.schones.wetter.
 1    IN      PTR    dns1.schoenes.wetter.
 
-systectl restart named.service
+systemctl restart named.service
 
 
+server neustart
 
+systemctl restart isc-dhcp-server.service
 
+hostname = rechnername
 
+DHCP-Server                            DNS-Server
+Clients <hostname>                  rev.
+            <IP>                    <host-ip>    IN    PTR
+                                    fwd.           IN    A
+
+TSIG = Transaction signature
+
+router 
+tsig-keygen SCHOEN (key generieren)
+tsig-keygen SCHOEN >schoen.key (key in datei umleiten)
+                                less schoen.key (um den key zu sehen)
+                                ls -l schoen.key (um die berechtigungen zu sehen)
+                                cp schoen.key /etc/dhcp/
+
+systemctl restart named.service
+systemctl restart isc-dhcp-server.service
+                                
 ------------------------------------------------------------
 
 🧰 Paketverwaltung (Debian/Ubuntu – apt)
