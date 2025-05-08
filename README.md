@@ -342,6 +342,72 @@ less nameld.conf.default-zones
 less /usr/share/dns/root.hints
 less db.local
 
+main configuration /etc/bind/
+data bases         /var/cache/bind/
+cd /etc/bind
+less named.conf 
+less named.conf.options
+
+Diese Adressen sind in RFC 1918, Address Allocation for Private Internets definiert. Sie können diese privaten Adressen, die auch als 1918-Adressen bezeichnet werden, für Systeme in lokalen Netzwerken innerhalb eines Firmen-Intranets verwenden. Diese privaten Adressen sind jedoch im Internet nicht gültig.
+
+less named.conf.local
+
+--Domain erstellen
+
+nano named.conf.options
+>forwarders (entkommentiert)
+>8.8.8.8
+>1.1.1.1
+ipv6 kommentiert //
+
+nano named.conf.local
+>zone "schoenes.wetter"  {
+>     "type master;
+>    file "schoen.fwd";
+>
+>zone    "120.168.192.in-addr-arpa"    {
+>    type master;
+>    file "schoen.rev";
+};
+
+cd /etc/bind
+
+cp db.empty /var/cache/bind/schoen.fwd
+
+nano /var/cache/bind/schoen.fwd
+
+$TTL 86400
+@    IN    SOA    dns1.schones.wetter. root (
+                    1         ;Serial
+                    604800    ;Refresh
+                    86400     ;Retry
+                    2419200   ;Expire
+                    86400 )   ; Negative Cache TTL
+
+     IN      NS     dns1.schones.wetter.
+dns1  IN    A        192.168.120.1
+
+
+cp db.empty /var/cache/bind/schoen.rev
+
+nano /var/cache/bind/schoen.rev
+
+$TTL 86400
+@    IN    SOA    dns1.schones.wetter. root (
+                    1         ;Serial
+                    604800    ;Refresh
+                    86400     ;Retry
+                    2419200   ;Expire
+                    86400 )   ; Negative Cache TTL
+
+     IN      NS     dns1.schones.wetter.
+1    IN      PTR    dns1.schoenes.wetter.
+
+systectl restart named.service
+
+
+
+
 
 ------------------------------------------------------------
 
