@@ -309,7 +309,8 @@ cp VOGEL /etc/dhcp/             (DHCP = dhcp)
 cp VOGEL /etc/bind/             (DNS = bind)
 
 
-*DHCP SERVER EINRICHTEN SCHRITTANLEITUNG*
+*DHCP SERVER EINRICHTEN SCHRITTANLEITUNG*   
+(prüfen wenn problem bei Namensauflösung)
 
 1) nano /etc/dhcp/dhcpd.conf
 
@@ -401,7 +402,14 @@ $TTL 86400
 
 systemctl restart named.service
 systemctl restart isc-dhcp-server.service
-                            
+
+
+Um im eigenen router zu schauen ob die daten weitergeleitet werden muss man :
+nano /etc/resolv.conf
+>domain mai.baum
+>search mai.baum
+>nameserver 172.18.19.1
+
 ------------------------------------------------------------
 
 🧰 Paketverwaltung (Debian/Ubuntu – apt)
