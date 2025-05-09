@@ -300,126 +300,6 @@ A fully qualified domain name (FQDN), sometimes also called an absolute domain n
 2.sub-level-domain google,t-online,1&1 (alles nach dem ersten punkt und vor dem letzten)
 3.Hostname         www , hostname (alles vor dem ersten punkt)
 
-------------------------------------------------------------
-Domains
-
-dig  (domain information grabber)
-
-dig t-online.de 
-
-SOA = start of authority
-
-A  = address (ipv4)
-NS = Nameserver
-MX = mailexchanger
-AAAA = ipv6
-PTR = 
-
-host www.vodafone.de (forward auflösung) zeigt ip an 
-
-host 139.7.147.41 (reverse auflösung) zeigt die domain an 
-
-SOA-Datensatz
-
-ttl = time to live
-
-<domain>.       ttl        <class>          <typ>        <(Master)Name-Server>                <e-mail-admin>
-t-online.de     86400         IN            SOA          dns00.dns.t-ipnet.de.        dns.telekom.de.     (
-
-2025050600  ; serial number      (letzte DNS bearbeitung)
-     10800  ; refresh time       (
-      1800  ; retry time         (
-   3024000  ; expire time        (ablaufdatum)
-      3600  ; neg.ttl            (wenn nach einem Rechner gefragt wurde der nicht in der Domain ist wir diese anfrage für eine stunde im Cache gespeichert)
-)
-                            IN                NS        dns00.dns.t-ipnet.de.
-                            IN                NS        dns182.t-online.de.
-dns                         IN                A           194.2.16.170
-www                         IN                A            12.144.33.8
-
-less named.conf
-less nameld.conf.default-zones
-less /usr/share/dns/root.hints
-less db.local
-
-main configuration /etc/bind/
-data bases         /var/cache/bind/
-cd /etc/bind
-less named.conf 
-less named.conf.options
-
-Diese Adressen sind in RFC 1918, Address Allocation for Private Internets definiert. Sie können diese privaten Adressen, die auch als 1918-Adressen bezeichnet werden, für Systeme in lokalen Netzwerken innerhalb eines Firmen-Intranets verwenden. Diese privaten Adressen sind jedoch im Internet nicht gültig.
-
-less named.conf.local
-
---Domain erstellen
-
-nano named.conf.options
->forwarders (entkommentiert)
->8.8.8.8                       (Hier können wir auch einen anderen server einstellen)  
->1.1.1.1                       
-ipv6 kommentiert //
-
-nano named.conf.local
->zone "schoenes.wetter"  {
->     "type master;
->    file "schoen.fwd";
->
->zone    "120.168.192.in-addr-arpa"    {
->    type master;
->    file "schoen.rev";
-};
-
-cd /etc/bind
-
-cp db.empty /var/cache/bind/schoen.fwd
-
-nano /var/cache/bind/schoen.fwd
-
-$TTL 86400
-@    IN    SOA    dns1.schones.wetter. root (
-                    1         ;Serial
-                    604800    ;Refresh
-                    86400     ;Retry
-                    2419200   ;Expire
-                    86400 )   ; Negative Cache TTL
-
-     IN      NS     dns1.schones.wetter.
-dns1  IN    A        192.168.120.1
-
-
-cp db.empty /var/cache/bind/schoen.rev
-
-nano /var/cache/bind/schoen.rev
-
-$TTL 86400
-@    IN    SOA    dns1.schones.wetter. root (
-                    1         ;Serial
-                    604800    ;Refresh
-                    86400     ;Retry
-                    2419200   ;Expire
-                    86400 )   ; Negative Cache TTL
-
-     IN      NS     dns1.schones.wetter.
-1    IN      PTR    dns1.schoenes.wetter.
-
-systemctl restart named.service
-
-hostname = rechnername
-
-DHCP-Server                            DNS-Server
-Clients <hostname>                  rev.
-            <IP>                    <host-ip>    IN    PTR
-                                    fwd.           IN    A
-
-TSIG = Transaction signature
-
-router 
-tsig-keygen SCHOEN (key generieren)
-tsig-keygen SCHOEN >schoen.key (key in datei umleiten)
-                                less schoen.key (um den key zu sehen)
-                                ls -l schoen.key (um die berechtigungen zu sehen)
-                                cp schoen.key /etc/dhcp/
 ------------------------------------------------------------------------------------
 *KEY ERSTELLT* 
 apt install bind9
@@ -597,6 +477,75 @@ ss -tuln                          # Offene Ports (neuer, moderner)
 
 nmap <ziel>                       # Portscan (ggf. installieren)
 
+------------------------------------------------------------
+NOTIZEN
+------------------------------------------------------------
+Domains
+
+dig  (domain information grabber)
+
+dig t-online.de 
+
+SOA = start of authority
+
+A  = address (ipv4)
+NS = Nameserver
+MX = mailexchanger
+AAAA = ipv6
+PTR = 
+
+host www.vodafone.de (forward auflösung) zeigt ip an 
+
+host 139.7.147.41 (reverse auflösung) zeigt die domain an 
+
+SOA-Datensatz
+
+ttl = time to live
+
+<domain>.       ttl        <class>          <typ>        <(Master)Name-Server>                <e-mail-admin>
+t-online.de     86400         IN            SOA          dns00.dns.t-ipnet.de.        dns.telekom.de.     (
+
+2025050600  ; serial number      (letzte DNS bearbeitung)
+     10800  ; refresh time       (
+      1800  ; retry time         (
+   3024000  ; expire time        (ablaufdatum)
+      3600  ; neg.ttl            (wenn nach einem Rechner gefragt wurde der nicht in der Domain ist wir diese anfrage für eine stunde im Cache gespeichert)
+)
+                            IN                NS        dns00.dns.t-ipnet.de.
+                            IN                NS        dns182.t-online.de.
+dns                         IN                A           194.2.16.170
+www                         IN                A            12.144.33.8
+
+less named.conf
+less nameld.conf.default-zones
+less /usr/share/dns/root.hints
+less db.local
+
+main configuration /etc/bind/
+data bases         /var/cache/bind/
+cd /etc/bind
+less named.conf 
+less named.conf.options
+
+Diese Adressen sind in RFC 1918, Address Allocation for Private Internets definiert. Sie können diese privaten Adressen, die auch als 1918-Adressen bezeichnet werden, für Systeme in lokalen Netzwerken innerhalb eines Firmen-Intranets verwenden. Diese privaten Adressen sind jedoch im Internet nicht gültig.
+
+less named.conf.local
+
+hostname = rechnername
+
+DHCP-Server                            DNS-Server
+Clients <hostname>                  rev.
+            <IP>                    <host-ip>    IN    PTR
+                                    fwd.           IN    A
+
+TSIG = Transaction signature
+
+router 
+tsig-keygen SCHOEN (key generieren)
+tsig-keygen SCHOEN >schoen.key (key in datei umleiten)
+                                less schoen.key (um den key zu sehen)
+                                ls -l schoen.key (um die berechtigungen zu sehen)
+                                cp schoen.key /etc/dhcp/
 ------------------------------------------------------------
 🧪 Bash-Skript: Warnung bei voller Partition
 ------------------------------------------------------------
