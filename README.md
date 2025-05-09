@@ -405,11 +405,6 @@ $TTL 86400
 
 systemctl restart named.service
 
-
-server neustart
-
-systemctl restart isc-dhcp-server.service
-
 hostname = rechnername
 
 DHCP-Server                            DNS-Server
@@ -425,10 +420,108 @@ tsig-keygen SCHOEN >schoen.key (key in datei umleiten)
                                 less schoen.key (um den key zu sehen)
                                 ls -l schoen.key (um die berechtigungen zu sehen)
                                 cp schoen.key /etc/dhcp/
+------------------------------------------------------------------------------------
+*KEY ERSTELLT* 
+apt install bind9
+tsig-keygen VOGEL
+tsig-keygen VOGEL >vogel.fliegt
+cp VOGEL /etc/dhcp/             (DHCP = dhcp)
+cp VOGEL /etc/bind/             (DNS = bind)
+
+
+*DHCP SERVER EINRICHTEN SCHRITTANLEITUNG*
+
+1) nano /etc/dhcp/dhcpd.conf
+
+ddns-update-style standard;
+default-lease-time 600;
+max-lease-time 7200;
+subnet 172.25.200.0 netmask 255.255.255.0 {
+    include "/etc/dhcp/vogel.key";
+    range 172.25.200.10 172.25.200.100;
+    option routers 172.25.200.1;
+    option domain-name-servers 172.25.200.1;
+    option domain-name "vogel.fliegt";
+    zone vogel.fliegt. {
+    primary 172.25.200.1;
+    key VOGEL;
+    }
+    zone 200.25.172.in-addr-arpa. {
+    primary 172.25.200.1;
+    key VOGEL;
+    }
+}
+
+2) nano /etc/default/isc-dhcp-server
+
+INTERFACESv4 = "enp0s8"
+
+*NAMESERVER EINRICHTEN SCHRITTANLEITUNG*
+
+
+
+1) nano /etc/bind/named.conf.options
+
+forwarders {        (default is kommentiert also entkommentieren)
+8.8.8.8;
+};
+
+2) nano /etc/bind/named.conf.local
+
+include "/etc/bind/vogel.key";     (nutzung der key Datei)
+
+# key "VOGEL" {              (alternative zum include)
+#    algorithm HMAC-SHA256;
+#    secret
+
+zone "vogel.fliegt"
+    type master;
+    file "vogel.fwd"
+    allow-update { key VOGEL; };
+
+zone "200.25.172.in-addr-arpa" {
+    type master;
+    file "vogel.rev";
+    allow-update { key VOGEL; };
+
+};
+
+
+less /etc/bind/named.conf.options     (directory um zu schauen wo der speicherpfad ist)
+
+cp /etc/bind/db.empty /var/cache/bind/vogel.fwd
+cp /etc/bind/db.empty /var/cache/bind/vogel.rev
+
+nano /var/cache/bind/vogel.fwd
+
+$TTL 86400
+@    IN    SOA    ns1.vogel.fliegt. root (
+                    1         ;Serial
+                    604800    ;Refresh
+                    86400     ;Retry
+                    2419200   ;Expire
+                    86400 )   ; Negative Cache TTL
+
+     IN      NS     ns1.vogel.fliegt.
+ns1  IN      A        172.25.200.1
+
+
+nano /var/cache/bind/schoen.rev
+
+$TTL 86400
+@    IN    SOA      ns1.vogel.fliegt. root (
+                    1         ;Serial
+                    604800    ;Refresh
+                    86400     ;Retry
+                    2419200   ;Expire
+                    86400 )   ; Negative Cache TTL
+
+     IN      NS     ns1.vogel.fliegt.
+1    IN      PTR    ns1.vogel.fliegt.
 
 systemctl restart named.service
 systemctl restart isc-dhcp-server.service
-                                
+                            
 ------------------------------------------------------------
 
 🧰 Paketverwaltung (Debian/Ubuntu – apt)
