@@ -410,6 +410,125 @@ nano /etc/resolv.conf
 >search mai.baum
 >nameserver 172.18.19.1
 
+
+------------------------------------------------------------
+Archivierung
+
+guip, bzip2, xz = compression Software
+
+tar = tape archiver
+ar - archive
+t - tape
+
+tar [-]<options>
+
+c = create
+f = file/archivname
+x = extract 
+t = table (inhalt Archiv)
+z = gzip
+j = bzip2
+J = xz
+
+du = disc used (summary, human readeble)
+du -sh /usr/
+
+-------------------------------------------------
+
+ls -l
+
+
+
+tar czf home.tar.gz /hom/
+
+tar cjf home.tar.bz2 /home/
+
+tar czf usr.tar.gz /usr/
+
+tar cJf var.tar.xz /var/
+
+tar xf ~/var.tar.xz  (die ~ tilde steht fürs Home directory)
+
+file var.tar.gz  (um zu sehen was für einen Dateityp und was in der Datei drin ist)
+
+
+rm /var/cache/man/sv/index.db   (datei löschen)
+ls -l /var/cache/man/sv/        (datei sichten)
+cd /                             (home verzeichnis)
+tar xf /root/var.tar.gz (option 1)
+tar xf ~/var-tar-gz   (option 2)
+
+tar xf /root/var.tar.gz var/cache/man/sv/index.de  (wiederherstellen)
+
+ls- l /var/cache/man/sv/
+
+-------------------------------------------------
+
+Verschlüsselung
+
+gpg = gnu pgp
+pgp = pretty good privacy
+
+gpg = asynchrone Verschlüsselung
+1. public key
+2. privat key (secret key)
+zusammen ist es ein schlüsselpaar = key-pair
+(werden immer zusammen erzeugt)
+
+gpg --full-gen-key
+>
+
+
+als anderer nutzer anmelden
+su - niklas
+cp /tmp/Friedrich.key .  (der punkt am ende steht für das Verzeichnis in dem man aktuell steht)
+
+gpg --import Friedrich.key
+
+gpg -e Friedrich-key.txt 
+>FRIEDRICH1
+
+cat Friedrich-key.txt.gpg
+
+cp Friedrich-key.txt.gpg /tmp/
+
+--Jetzt nutzer wechseln
+
+cp Friedrich-key.txt.gpg .
+
+cat Friedrich-key.txt.gpg
+
+
+
+
+
+gpg --export -a -o ira.key
+
+ls
+
+
+
+apt install zip
+
+
+1.
+
+zip home -r /home/
+
+zip -sf home.zip | less   (anzeigen lassen)  (sf = showfile)
+
+unzip home.zip -d /tmp/
+
+2.
+
+zip boot -r /boot/    (archivieren)
+
+(-d ist das directory wenn man das nicht angibt wird es im aktuelln verzeignis (pwd) entpackt)
+
+unzip boot.zip -d /tmp/
+
+
+
 ------------------------------------------------------------
 
 🧰 Paketverwaltung (Debian/Ubuntu – apt)
