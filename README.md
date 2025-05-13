@@ -433,6 +433,7 @@ J = xz
 du = disc used (summary, human readeble)
 du -sh /usr/
 
+cat = anschauen
 -------------------------------------------------
 
 ls -l
@@ -475,58 +476,94 @@ gpg = asynchrone Verschlüsselung
 zusammen ist es ein schlüsselpaar = key-pair
 (werden immer zusammen erzeugt)
 
-gpg --full-gen-key
->
+GPG-VERSCHLÜSSELUNG – SCHRITT-FÜR-SCHRITT-ANLEITUNG
 
+Ziel:
+Eine Datei so verschlüsseln, dass nur eine bestimmte Person sie mit ihrem privaten Schlüssel lesen kann.
 
-als anderer nutzer anmelden
-su - niklas
-cp /tmp/Friedrich.key .  (der punkt am ende steht für das Verzeichnis in dem man aktuell steht)
+============================================================
+1. Schlüsselpaar erstellen
+------------------------------------------------------------
+Befehl:
+gpg --full-generate-key
 
-gpg --import Friedrich.key
+Erklärung:
+Erstellt ein neues Schlüsselpaar (privat + öffentlich). Du wirst nach Name, E-Mail, Ablaufdatum und Passwort gefragt. Der private Schlüssel bleibt geheim bei dir, der öffentliche wird später weitergegeben.
 
-gpg -e Friedrich-key.txt 
->FRIEDRICH1
+============================================================
+2. Public Key exportieren
+------------------------------------------------------------
+Befehl:
+gpg --export -a -o NAME.key
 
-cat Friedrich-key.txt.gpg
+Erklärung:
+Exportiert deinen öffentlichen Schlüssel im ASCII-Format in eine Datei (z. B. Friedrich.key), die du an andere weitergeben kannst, damit sie dir verschlüsselte Nachrichten senden können.
 
-cp Friedrich-key.txt.gpg /tmp/
+============================================================
+3. Schlüssel übergeben / kopieren
+------------------------------------------------------------
+Befehl:
+cp NAME.key /tmp/
 
---Jetzt nutzer wechseln
+Erklärung:
+Kopiert die Datei mit deinem öffentlichen Schlüssel in ein gemeinsames oder temporäres Verzeichnis (z. B. /tmp), damit ein anderer Nutzer sie importieren kann.
 
-cp Friedrich-key.txt.gpg .
+============================================================
+4. Datei zum Verschlüsseln vorbereiten
+------------------------------------------------------------
+Befehl:
+echo "Geheime Nachricht" > datei.txt
 
-cat Friedrich-key.txt.gpg
+nano datei.txt (um datei mit text zu füllen)
 
+Erklärung:
+Erstellt die Datei, die du verschlüsseln möchtest. Du kannst den Befehl auch durch einen Texteditor ersetzen oder eine bestehende Datei verwenden.
 
+============================================================
+5. Public Key des Empfängers importieren
+------------------------------------------------------------
+Befehl:
+gpg --import EMPFAENGER.key
 
+Erklärung:
+Importiert den öffentlichen Schlüssel des Empfängers in dein GPG-Schlüsselbund, damit du Dateien für ihn verschlüsseln kannst.
 
+============================================================
+6. Datei verschlüsseln
+------------------------------------------------------------
+Befehl:
+gpg -e -r "Name" datei.txt
 
-gpg --export -a -o ira.key
+Erklärung:
+Verschlüsselt die Datei „datei.txt“ für den Empfänger mit dem Namen „Name“ (so wie im Schlüssel angegeben). Das Ergebnis ist die Datei „datei.txt.gpg“, die nur der Empfänger mit seinem privaten Schlüssel entschlüsseln kann.
+🔸 -e: encrypt
+🔸 -r: Empfänger
+============================================================
+7. Datei weitergeben / kopieren
+------------------------------------------------------------
+Befehl:
+cp datei.txt.gpg /tmp/
 
-ls
+Erklärung:
+Kopiert die verschlüsselte Datei in ein temporäres Verzeichnis oder einen Speicherort, auf den der Empfänger zugreifen kann.
 
+============================================================
+8. Datei holen als Empfänger
+------------------------------------------------------------
+Befehl:
+cp /tmp/datei.txt.gpg .
 
+Erklärung:
+Der Empfänger kopiert die verschlüsselte Datei in sein eigenes Arbeitsverzeichnis.
 
-apt install zip
+============================================================
+9. Datei entschlüsseln
+------------------------------------------------------------
+Befehl:
+gpg -d datei.txt.gpg
 
-
-1.
-
-zip home -r /home/
-
-zip -sf home.zip | less   (anzeigen lassen)  (sf = showfile)
-
-unzip home.zip -d /tmp/
-
-2.
-
-zip boot -r /boot/    (archivieren)
-
-(-d ist das directory wenn man das nicht angibt wird es im aktuelln verzeignis (pwd) entpackt)
-
-unzip boot.zip -d /tmp/
-
+Erklärung:
+Der Empfänger entschlüsselt die Datei mit seinem privaten Schlüssel. Der Inhalt wird angezeigt oder (mit zusätzlicher Option) in eine neue Datei geschrieben.
 
 
 ------------------------------------------------------------
