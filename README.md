@@ -438,8 +438,6 @@ cat = anschauen
 
 ls -l
 
-
-
 tar czf home.tar.gz /hom/
 
 tar cjf home.tar.bz2 /home/
@@ -490,6 +488,7 @@ gpg --full-generate-key
 Erklärung:
 Erstellt ein neues Schlüsselpaar (privat + öffentlich). Du wirst nach Name, E-Mail, Ablaufdatum und Passwort gefragt. Der private Schlüssel bleibt geheim bei dir, der öffentliche wird später weitergegeben.
 
+Public-key wird hier erzeugt
 ============================================================
 2. Public Key exportieren
 ------------------------------------------------------------
@@ -498,7 +497,8 @@ gpg --export -a -o NAME.key
 
 Erklärung:
 Exportiert deinen öffentlichen Schlüssel im ASCII-Format in eine Datei (z. B. Friedrich.key), die du an andere weitergeben kannst, damit sie dir verschlüsselte Nachrichten senden können.
-
+-a ASCII code
+-o directory
 ============================================================
 3. Schlüssel übergeben / kopieren
 ------------------------------------------------------------
@@ -509,7 +509,7 @@ Erklärung:
 Kopiert die Datei mit deinem öffentlichen Schlüssel in ein gemeinsames oder temporäres Verzeichnis (z. B. /tmp), damit ein anderer Nutzer sie importieren kann.
 
 ============================================================
-4. Datei zum Verschlüsseln vorbereiten
+4. Datei zum Verschlüsseln vorbereiten (Optional)
 ------------------------------------------------------------
 Befehl:
 echo "Geheime Nachricht" > datei.txt
@@ -520,10 +520,10 @@ Erklärung:
 Erstellt die Datei, die du verschlüsseln möchtest. Du kannst den Befehl auch durch einen Texteditor ersetzen oder eine bestehende Datei verwenden.
 
 ============================================================
-5. Public Key des Empfängers importieren
+5. Public Key des Empfängers importieren (davor muss ich auf dem neuen nutzer anmelden)
 ------------------------------------------------------------
 Befehl:
-gpg --import EMPFAENGER.key
+gpg --import NAME.key
 
 Erklärung:
 Importiert den öffentlichen Schlüssel des Empfängers in dein GPG-Schlüsselbund, damit du Dateien für ihn verschlüsseln kannst.
@@ -533,6 +533,7 @@ Importiert den öffentlichen Schlüssel des Empfängers in dein GPG-Schlüsselbu
 ------------------------------------------------------------
 Befehl:
 gpg -e -r "Name" datei.txt
+gpg -e datei.txt
 
 Erklärung:
 Verschlüsselt die Datei „datei.txt“ für den Empfänger mit dem Namen „Name“ (so wie im Schlüssel angegeben). Das Ergebnis ist die Datei „datei.txt.gpg“, die nur der Empfänger mit seinem privaten Schlüssel entschlüsseln kann.
@@ -565,6 +566,20 @@ gpg -d datei.txt.gpg
 Erklärung:
 Der Empfänger entschlüsselt die Datei mit seinem privaten Schlüssel. Der Inhalt wird angezeigt oder (mit zusätzlicher Option) in eine neue Datei geschrieben.
 
+
+
+niklas
+1gpg --full-gen-key 
+1gpg --export -a -o niklas.key 
+1cp niklas.key /tmp/
+3cp /tmp/dassi.txt.gpg .
+3gpg -d dassi.txt.gpg
+
+dassi
+2gpg --import /tmp/niklas.key
+2nano dassi.txt
+2gpg -e dassi.txt   (public key eingeben)
+2cp dassi.txt.gpg /tmp/
 
 ------------------------------------------------------------
 
