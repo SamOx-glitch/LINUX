@@ -341,9 +341,29 @@ subnet 172.25.200.0 netmask 255.255.255.0 {
 
 INTERFACESv4 = "enp0s8"
 
+MASQUERADE AKTIVIEREN auf router (Client maskieren damit wir ins Internet können)
+
+nano /etc/sysctl.conf
+>net.ipv4.ip_forward=1 (entkommentieren)
+
+apt install iptables
+
+iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
+(enp0s8 geht zum client enps03 geht ins internet)
+
+
+nano /etc/rc.local
+
+>#!/bin/bash
+>iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE  (um den Traffic auch wieder zurückzubekommen (tcp))
+
+ls -l /etc/rc.local
+
+chmod a+x /etc/rc.local  (chmod 755 /etc/rc.local)
+
+. /etc/rc.local
+
 *NAMESERVER EINRICHTEN SCHRITTANLEITUNG*
-
-
 
 1) nano /etc/bind/named.conf.options
 
