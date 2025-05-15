@@ -196,15 +196,19 @@ nano /etc/default/useradd   (bash shell zuordnen als default)
 
 nano /etc/group             (User hinzufügen)
 
+chgrp web-admins /srv/www   (web-admins als Eingetümer von /srv/www mit Vollzugriff)
+
 ------------------------------------------------------------
 
 🧱 RAID mit mdadm
 
 apt install mdadm
 
-mdadm -C   md127      -l1             -n2 /dev/sd[b-c]         -x1 /dev/sdd
+mdadm -C   md127      -l1             -n2 /dev/sd[b-c]                  -x1 /dev/sdd
            legende     raid level       wieviel platten ohne spare            spare
 
+
+lsblk (alle festplatten anzeigen lassen)
 
 -Logisches Volume Managment
 
@@ -303,7 +307,7 @@ A fully qualified domain name (FQDN), sometimes also called an absolute domain n
 ------------------------------------------------------------------------------------
 *KEY ERSTELLT* 
 apt install bind9
-tsig-keygen VOGEL
+tsig-keyg
 tsig-keygen VOGEL >vogel.fliegt
 cp VOGEL /etc/dhcp/             (DHCP = dhcp)
 cp VOGEL /etc/bind/             (DNS = bind)
@@ -347,7 +351,7 @@ forwarders {        (default is kommentiert also entkommentieren)
 8.8.8.8;
 };
 
-2) nano /etc/bind/named.conf.local
+2) nano /etc/bind/named.conf.local   (inkludiere die key datei in )
 
 include "/etc/bind/vogel.key";     (nutzung der key Datei)
 
@@ -355,17 +359,17 @@ include "/etc/bind/vogel.key";     (nutzung der key Datei)
 #    algorithm HMAC-SHA256;
 #    secret
 
-zone "vogel.fliegt"
+zone "vogel.fliegt" {
     type master;
-    file "vogel.fwd"
-    allow-update { key VOGEL; };
+    file "vogel.fwd";
+    allow-update { key VOGEL; }; 
+    };
 
 zone "200.25.172.in-addr-arpa" {
     type master;
     file "vogel.rev";
     allow-update { key VOGEL; };
-
-};
+    };
 
 
 less /etc/bind/named.conf.options     (directory um zu schauen wo der speicherpfad ist)
