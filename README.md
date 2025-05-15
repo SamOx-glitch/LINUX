@@ -202,7 +202,7 @@ nano /etc/group             (User hinzufügen)
 
 apt install mdadm
 
-mdadm -C /dev/md127      -l1             -n2 /dev/sd[b-c]         -x1 /dev/sdd
+mdadm -C   md127      -l1             -n2 /dev/sd[b-c]         -x1 /dev/sdd
            legende     raid level       wieviel platten ohne spare            spare
 
 
