@@ -446,7 +446,7 @@ ssh-keygen (auf client) (key erstellen)
 
 ls -la .ssh/ (keys einsehen)
 
-ssh-copy-id niklas@)
+ssh-copy-id -i .ssh/eid niklas@www
 
 ssh-keygen -t rsa -f .ssh/eid
 
