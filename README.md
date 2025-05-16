@@ -452,6 +452,7 @@ ssh-keygen -t rsa -f .ssh/eid
 
 ssh -i .ssh/eid niklas@www (um mich auf dem zweiten server anzumelden, da er bei" ssh niklas@ns1 " automatisch den ersten erstellten key verwendet)
 
+ssh-keygen -t dsa -f .ssh/mpwd
 
 ------------------------------------------------------------
 Archivierung
