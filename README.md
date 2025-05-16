@@ -434,6 +434,24 @@ nano /etc/resolv.conf
 >search mai.baum
 >nameserver 172.18.19.1
 
+------------------------------------------------------------
+Server untereinander verbinden und steuern
+
+ssh niklas@ns1 (ssh <nutzername>@nameserver)
+ssh lale@ns1   (ein passwort muss bestehen (passwd lale))
+
+less .ssh/known_hosts (auf client "root" alle keys)
+
+ssh-keygen (auf client) (key erstellen)
+
+ls -la .ssh/ (keys einsehen)
+
+ssh-copy-id niklas@)
+
+ssh-keygen -t rsa -f .ssh/eid
+
+ssh -i .ssh/eid niklas@www (um mich auf dem zweiten server anzumelden, da er bei" ssh niklas@ns1 " automatisch den ersten erstellten key verwendet)
+
 
 ------------------------------------------------------------
 Archivierung
