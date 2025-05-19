@@ -133,6 +133,8 @@ passwd benutzer             # Passwort setzen
 userdel benutzer            # Benutzer löschen
 userdel -r benutzer         # inkl. Home-Verzeichnis löschen
 
+getent passwd               # alle nutzer anzeigen lassen
+
 ------------------------------------------------------------
 
 ⏻ Systemsteuerung
@@ -435,7 +437,14 @@ nano /etc/resolv.conf
 >nameserver 172.18.19.1
 
 ------------------------------------------------------------
+
+
+
 Server untereinander verbinden und steuern
+
+ssh =secure shell
+
+
 
 ssh niklas@ns1 (ssh <nutzername>@nameserver)
 ssh lale@ns1   (ein passwort muss bestehen (passwd lale))
@@ -453,6 +462,24 @@ ssh-keygen -t rsa -f .ssh/eid
 ssh -i .ssh/eid niklas@www (um mich auf dem zweiten server anzumelden, da er bei" ssh niklas@ns1 " automatisch den ersten erstellten key verwendet)
 
 ssh-keygen -t dsa -f .ssh/mpwd
+ssh-keygen -t ecdsa
+ssh-keygen -t ed25519
+ssh-keygen -t rsa 
+
+ssh-agent = keys anzeigen lasse
+
+ssh-add .ssh/id_rsa
+ssh-add .ssh/id_dsa
+ssh-add .ssh/id_ecdsa
+ssh-add .ssh/id_ed25519
+
+
+ssh-copy-id -i .ssh/id_rsa.pub lina@ns1
+ssh-copy-id -i .ssh/id_dsa.pub lina@ns1
+ssh-copy-id -i .ssh/id_ecdsa.pub lina@ns1
+ssh-copy-id -i .ssh/id_ed25519.pub lina@ns1
+
+dann login 
 
 ------------------------------------------------------------
 Archivierung
