@@ -482,6 +482,18 @@ ssh-copy-id -i .ssh/id_ed25519.pub lina@ns1
 dann login 
 
 ------------------------------------------------------------
+Backup
+crontab -e  #benutzer crontab anpassen
+
+0    */3    *    *    1-5    rsync -a /home/* /vvar/backups/home/ <e/ >/dev/null 2>&1
+
+crontab -l  #benutzer crontab auflisten
+crontab -r  # benutzer crontab löschen
+
+
+
+
+------------------------------------------------------------
 Archivierung
 
 guip, bzip2, xz = compression Software
