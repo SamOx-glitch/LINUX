@@ -511,6 +511,56 @@ crontab -r  # benutzer crontab löschen
 
 
 
+------------------------------------------------------------
+HTML - Webseite 
+
+server (ns1)
+
+apt install apache2
+systemctl stop named.service
+nano /var/cache/bind/last.fwd
+
+>oma      A        172.25.35.100
+>www      A        172.25.35.100
+
+systemctl start named.service
+
+server (www)
+
+apt install apache2
+nano /etc/apache2/sites-available/oma.conf
+ping oma
+ping oma.last.chance
+mkdir /srv/www/oma -p
+nano /srv/www/oma/index.html
+a2ensite oma.conf
+systemctl reload apache2
+nano /srv/www/oma/index.html
+
+
+sed s/oma/opa/ oma.conf >opa.conf
+sed s/oma/son/ oma.conf >son.conf
+
+a2ensite son.conf
+s2ensite opa.conf
+mkdir /srv/www/opa
+mkdir /srv/www/son
+
+cd
+nano index.html 
+cp index.html /srv/www/opa/
+cp index.html /srv/www/son/
+
+sed -i s/xyz/opa /srv/www/opa/index.html
+sed -i s/xyz/son /srv/www/son/index.html
+
+cat /srv/www/son/index.html
+cat /srv/www/opa/index.html
+systemctl restart apache2.service
+
+
+
+
 
 ------------------------------------------------------------
 Archivierung
