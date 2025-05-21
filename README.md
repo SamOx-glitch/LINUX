@@ -551,16 +551,44 @@ nano index.html
 cp index.html /srv/www/opa/
 cp index.html /srv/www/son/
 
-sed -i s/xyz/opa /srv/www/opa/index.html
-sed -i s/xyz/son /srv/www/son/index.html
+sed -i s/xyz/opa/ /srv/www/opa/index.html
+sed -i s/xyz/son/ /srv/www/son/index.html
 
 cat /srv/www/son/index.html
 cat /srv/www/opa/index.html
 systemctl restart apache2.service
 
+------------------------------------------------------------
+HTML Login erstellen
 
+nano /etc/apache2/sits-available/oma.conf
+<VirtualHost *:80>
 
+    ServerName oma.last.chance
+    DocumentRoot /srv/www/oma 
 
+    <Directory /srv/www/oma>
+        AllowOverride AuthConfig
+        Require all granted
+    </Directory>
+</VitualHost>
+
+nano /srv/www/oma/.htaccess
+
+htpasswd -c /srv/www/oma/.htpwd
+htpasswd -c /srv/www/oma/.htpwd vivienne
+htpasswd /srv/www/oma/.htpwd vlkmar
+
+cat /srv/www/oma/.htpwd vivi
+cat /srv/www/oma/.htpwd vivienne
+
+systemctl restart apache2.service
+
+nano /srv/www/oma/.htaccess
+>AuthType basic
+>AuthName "Nur fuer Mitglieder"
+>AuthUserFile /srv/www/oma/.htpwd
+>Require valid-user
 
 ------------------------------------------------------------
 Archivierung
