@@ -613,6 +613,29 @@ open ssl rsa -in privkey.pem -out oma.key
 ll
 openssl x509 -in oma.csr -out oma.crt -req -signkey oma.key -days 730
 
+ls -l
+rm privkey.csr
+rm oma.csr
+
+cd ..
+less ports.conf
+
+a2enmod ssl
+systemctl restart apache2
+
+nano sites-enabled/oma.conf
+<VirtualHost *:80>
+
+    ServerName oma.last.chance
+    Redirect / https://oma.last.chance
+    DocumentRoot /srv/www/oma 
+
+    <Directory /srv/www/oma>
+        AllowOverride AuthConfig
+        Require all granted
+    </Directory>
+</VitualHost>
+
 ------------------------------------------------------------
 Archivierung
 
