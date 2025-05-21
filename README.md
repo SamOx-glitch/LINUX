@@ -590,6 +590,29 @@ nano /srv/www/oma/.htaccess
 >AuthUserFile /srv/www/oma/.htpwd
 >Require valid-user
 
+
+------------------------------------------------------------
+SSL (zertifikat)
+secure socket layer
+
+o = organization
+cn = web.server.name
+ou = abteilung in Firma
+c = country
+l = locality
+
+DAP
+x500
+x509    (Zertifikate)
+
+mkdir /etc/apache2/certs
+cd /etc/apache2/certs
+openssl req -new -out oma.csr
+ls -l
+open ssl rsa -in privkey.pem -out oma.key
+ll
+openssl x509 -in oma.csr -out oma.crt -req -signkey oma.key -days 730
+
 ------------------------------------------------------------
 Archivierung
 
