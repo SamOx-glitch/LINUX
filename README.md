@@ -554,9 +554,12 @@ nano /srv/www/oma/index.html
 
 sed s/oma/opa/ oma.conf >opa.conf
 sed s/oma/son/ oma.conf >son.conf
+      von zu      (gesamten pfand angeben wenn man nicht im benötigten verzeichnis ist)
 
-a2ensite son.conf
+  
+a2ensite son.conf      (Fügt die available sites in enable hinzu)
 s2ensite opa.conf
+
 mkdir /srv/www/opa
 mkdir /srv/www/son
 
