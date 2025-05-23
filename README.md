@@ -502,17 +502,6 @@ azv = archiv zip visible
 rsync = rekursiv syncronisation
        
 ------------------------------------------------------------
-Backup
-crontab -e  #benutzer crontab anpassen
-
-0    */3    *    *    1-5    rsync -a /home/* /vvar/backups/home/ <e/ >/dev/null 2>&1
-
-crontab -l  #benutzer crontab auflisten
-crontab -r  # benutzer crontab löschen
-
-
-
-------------------------------------------------------------
 HTML - Webseite 
 
 server (ns1)
@@ -691,6 +680,16 @@ Systemctl restart apache2.service
 Backup erstellen
 
 rsync -avz /home/ nick@ss1:/sicher/s3/
+
+
+crontab -e  #benutzer crontab anpassen
+
+0    */3    *    *    1-5    rsync -a /home/* /vvar/backups/home/ <e/ >/dev/null 2>&1
+
+crontab -l  #benutzer crontab auflisten
+crontab -r  # benutzer crontab löschen
+
+
 
 ------------------------------------------------------------
 Archivierung
