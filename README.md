@@ -453,11 +453,11 @@ less .ssh/known_hosts (auf client "root" alle keys)
 
 ssh-keygen (auf client) (key erstellen)
 
-ls -la .ssh/ (keys einsehen)
+ls -la .ssh/ (keys einsehen) ss
 
 ssh-copy-id -i .ssh/eid niklas@www
 
-ssh-keygen -t rsa -f .ssh/eid
+ssh-keygen -t rsa -f .ssh/eid   (eid ist der name des keys)
 
 ssh niklas@www (um mich auf dem zweiten server anzumelden, da er bei" ssh niklas@ns1 " automatisch den ersten erstellten key verwendet)
 
@@ -486,6 +486,7 @@ dann login
 
 auf server verzeichnis erstellen auf einem server auf das ich das backup schicke
 
+-------------------------------------------------------------
 
 mkdir /var/backups/debxfc-home
 nano /etc/group
@@ -528,11 +529,24 @@ systemctl start named.service
 server (www)
 
 apt install apache2
-nano /etc/apache2/sites-available/oma.conf
+
 ping oma
 ping oma.last.chance
-mkdir /srv/www/oma -p
-nano /srv/www/oma/index.html
+mkdir /srv/www/oma -p           (www verzeichnis erstellen damit man weiss es ist ein webseiten client)
+nano /srv/www/oma/index.html   (Webseiten Text einfügen HTML)
+
+nano /etc/apache2/sits-available/oma.conf
+<VirtualHost *:80>
+
+    ServerName oma.last.chance
+    DocumentRoot /srv/www/oma 
+
+    <Directory /srv/www/oma>
+        AllowOverride AuthConfig
+        Require all granted
+    </Directory>
+</VitualHost>
+
 a2ensite oma.conf
 systemctl reload apache2
 nano /srv/www/oma/index.html
@@ -560,6 +574,7 @@ systemctl restart apache2.service
 
 ------------------------------------------------------------
 HTML Login erstellen
+
 
 nano /etc/apache2/sits-available/oma.conf
 <VirtualHost *:80>
