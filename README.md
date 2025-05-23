@@ -592,6 +592,10 @@ nano /etc/apache2/sits-available/oma.conf
 </VitualHost>
 
 nano /srv/www/oma/.htaccess
+>AuthType basic
+>AuthName "Nur fuer Mitglieder"
+>AuthUserFile /srv/www/oma/.htpwd
+>Require valid-user
 
 htpasswd -c /srv/www/oma/.htpwd
 htpasswd -c /srv/www/oma/.htpwd vivienne
@@ -601,13 +605,6 @@ cat /srv/www/oma/.htpwd vivi
 cat /srv/www/oma/.htpwd vivienne
 
 systemctl restart apache2.service
-
-nano /srv/www/oma/.htaccess
->AuthType basic
->AuthName "Nur fuer Mitglieder"
->AuthUserFile /srv/www/oma/.htpwd
->Require valid-user
-
 
 ------------------------------------------------------------
 SSL (zertifikat)
@@ -625,9 +622,9 @@ x509    (Zertifikate)
 
 mkdir /etc/apache2/certs
 cd /etc/apache2/certs
-openssl req -new -out oma.csr
+openssl req -new -out oma.csr    (ssl zertifikat erstellen)
 ls -l
-open ssl rsa -in privkey.pem -out oma.key
+openssl rsa -in privkey.pem -out oma.key    (Zertifikat auf meinen client anpassen)
 ll
 openssl x509 -in oma.csr -out oma.crt -req -signkey oma.key -days 730
 
@@ -641,18 +638,59 @@ less ports.conf
 a2enmod ssl
 systemctl restart apache2
 
-nano sites-enabled/oma.conf
-<VirtualHost *:80>
+openssl x509   -in  paule.csr   -out   paule.crt   -req  -signkey paule.key 
+ 
 
-    ServerName oma.last.chance
-    Redirect / https://oma.last.chance
-    DocumentRoot /srv/www/oma 
+rm privkey.pem 
 
-    <Directory /srv/www/oma>
-        AllowOverride AuthConfig
-        Require all granted
-    </Directory>
-</VitualHost>
+a2enmod   SSL 
+
+Nano /etc/apache2/sites-avaible/paule.conf  
+
+  -----
+
+<VirtualHost *:80> 
+
+ServerName paule.last.chance 
+
+Redirect /   https://paule.last.chance 
+
+</VirtualHost> 
+
+<VirtualHost *:443> 
+
+  
+
+ServerName paule.last.chance 
+
+                    DocumentRoot /srv/www/paule 
+
+SSLEngine on 
+
+SSLCertificateFIle /etc/apache2/certs/paule.crt 
+
+SSLCertificateKeyFile /etc/apache2/certs/paule.key 
+
+  
+
+                    <Directory /srv/www/paule> 
+
+                    Require all granted 
+
+                   </Directory> 
+
+    </Virtual Host > 
+  
+------
+
+a2enmod ssl
+
+Systemctl restart apache2.service
+
+------------------------------------------------------------
+Backup erstellen
+
+rsync -avz /home/ nick@ss1:/sicher/s3/
 
 ------------------------------------------------------------
 Archivierung
